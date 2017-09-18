@@ -7,7 +7,7 @@ const app = express();
 ///CREATE THE BOT
 ///__________________________________________________________________________________________________
 const GiphyBot = new SlackBot({
-  token: 'xoxb-241997068833-2uJoMexZNEv0LDKEhdQE0zHf',
+  token: 'SLACK_BOT_TOKEN_HERE',
   name: 'giphybot'
 });
 ///__________________________________________________________________________________________________
@@ -20,7 +20,7 @@ GiphyBot.params = {
 //variables needed to search GIPHY
 GiphyBot.giphy = {
   GIPHY_URL: 'https://api.giphy.com/v1/gifs/search?q=',
-  API_KEY: '&api_key=8a4c061bcdaa41f4804548fc0948e832',
+  API_KEY: '&api_key=GIPHY_API_TOKEN_HERE',
   RATING: '&rating=pg'
 };
 
