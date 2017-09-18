@@ -1,0 +1,20 @@
+{
+  "name": "giphybot",
+  "version": "1.0.0",
+  "description": "Slack Bot that pulls gifs from GIPHY for you so you don't have to search for them yourself.",
+  "main": "giphybot.js",
+  "scripts": {
+    "test": "start",
+    "start": "node giphybot.js"
+  },
+  "engines": {
+    "node": "6.11.2"
+  },
+  "author": "Noah Kellem",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.4",
+    "request": "^2.81.0",
+    "slackbots": "^1.1.0"
+  }
+}
