@@ -1,3 +1,6 @@
+///__________________________________________________________________________________________________
+///INSTALL DEPENDENCIES
+///__________________________________________________________________________________________________
 const SlackBot = require('slackbots');
 const request = require('request');
 const express = require('express');
@@ -7,7 +10,7 @@ const app = express();
 ///CREATE THE BOT
 ///__________________________________________________________________________________________________
 const GiphyBot = new SlackBot({
-  token: 'SLACK_BOT_TOKEN_HERE',
+  token: 'SLACK_API_BOT_TOKEN_HERE',
   name: 'giphybot'
 });
 ///__________________________________________________________________________________________________
@@ -20,7 +23,7 @@ GiphyBot.params = {
 //variables needed to search GIPHY
 GiphyBot.giphy = {
   GIPHY_URL: 'https://api.giphy.com/v1/gifs/search?q=',
-  API_KEY: '&api_key=GIPHY_API_TOKEN_HERE',
+  API_KEY: '&api_key=GIPHY_API_KEY_HERE',
   RATING: '&rating=pg'
 };
 
@@ -43,28 +46,31 @@ Object.seal(GiphyBot.giphyObject);
 ///__________________________________________________________________________________________________
 GiphyBot.on('start', () => {
   GiphyBot.postMessageToChannel('random', 'Come to me for all your .gif needs!', GiphyBot.params);
-  GiphyBot.postMessageToChannel('random', 'Use the phrase "Give me gif" to search for gifs', GiphyBot.params);
+  GiphyBot.postMessageToChannel('random', 'To search for a gif, say "giphybot SEARCH_TERM_HERE"', GiphyBot.params);
+  GiphyBot.postMessageToChannel('random', 'To get the next gif in the search, say "giphybot next"', GiphyBot.params);
 });
 
 GiphyBot.on('message', data => {
 
-  if(GiphyBot.determineIfMentioned(data) && !GiphyBot.isMessageSender(data)){
-    //extract the search term
-    const searchTerm = data.text.split('giphybot gif me')[1];
-    //search giphy
-    GiphyBot.searchGiphy(searchTerm, data.channel);
-  }
+  const command = data.text.split(' ');
 
   //see if the user wants to look for the next gif in their search
-  if(data.text.toLowerCase().indexOf('giphybot next') > -1 && !GiphyBot.isMessageSender(data)){
+  if(GiphyBot.determineIfMentioned(data) && (command[1].toLowerCase() === 'next' && command.length === 2) && !GiphyBot.isMessageSender(data)){
     GiphyBot.getNextGif(data.channel);
+  }
+  //if they don't, search for a new gif
+  else if(GiphyBot.determineIfMentioned(data) && !GiphyBot.isMessageSender(data)){
+    //extract the search term
+    const searchTerm = data.text.substring(data.text.indexOf(' '));
+    //search giphy
+    GiphyBot.searchGiphy(searchTerm, data.channel);
   }
 
 });
 
 //determines if the call to action has been said
 GiphyBot.determineIfMentioned = data => {
-  return data.text.toLowerCase().indexOf('giphybot gif me') > -1;
+  return data.text.toLowerCase().indexOf('giphybot') > -1;
 };
 
 //determines if the bot is the one that said its call to action
